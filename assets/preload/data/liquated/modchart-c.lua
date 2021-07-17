@@ -11,9 +11,11 @@ end
 
 function setDefaultX(id)
 	_G['defaultStrum'..id..'X'] = getActorX(id)
+    setActorAngle(0,id)
 end
 function setDefaultY(id)
 	_G['defaultStrum'..id..'Y'] = getActorY(id)
+    setActorAngle(0,id)
 end
 
 function update (elapsed)
@@ -464,32 +466,32 @@ function stepHit (step)
     end
 -- blinking notes (again)
     -- left arrow 
-    if step == 768 or step == 776 or step == 784 or step == 792 or step == 800 or step == 808 or step == 816 or step == 824 then 
+    if step == 768 or step == 776 or step == 780 or step == 792 or step == 796 or step == 808 or step == 812 or step == 824 or step == 828 then 
         tweenFadeOut(0, 1, 0.001)
     end
-    if step == 769 or step == 777 or step == 785 or step == 793 or step == 801 or step == 809 or step == 817 or step == 825 then 
-        tweenFadeIn(0, 0, 0.15)
+    if step == 769 or step == 777 or step == 781 or step == 793 or step == 797 or step == 809 or step == 813 or step == 825 or step == 829 then 
+        tweenFadeIn(0, 0, 0.1)
     end
     -- down arrow 
-    if step == 772 or step == 780 or step == 788 or step == 796 or step == 804 or step == 812 or step == 820 or step == 828 then 
+    if step == 772 or step == 784 or step == 788 or step == 800 or step == 804 or step == 812 or step == 816 or step == 820 then 
         tweenFadeOut(1, 1, 0.001)
     end
-    if step == 773 or step == 781 or step == 789 or step == 797 or step == 805 or step == 813 or step == 821 or step == 829 then 
-        tweenFadeIn(1, 0, 0.15)
+    if step == 773 or step == 785 or step == 789 or step == 801 or step == 805 or step == 813 or step == 817 or step == 821 then 
+        tweenFadeIn(1, 0, 0.1)
     end
     -- up arrow 
-    if step == 768 or step == 774 or step == 778 or step == 786 or step == 794 or step == 802 or step == 810 or step == 818 or step == 826 then 
+    if step == 768 or step == 778 or step == 782 or step == 794 or step == 798 or step == 810 or step == 814 or step == 826 or step == 830 then 
         tweenFadeOut(2, 1, 0.001)
     end
-    if step == 769 or step == 775 or step == 779 or step == 787 or step == 795 or step == 803 or step == 811 or step == 819 or step == 827 then 
-        tweenFadeIn(2, 0, 0.15)
+    if step == 769 or step == 779 or step == 783 or step == 795 or step == 799 or step == 811 or step == 815 or step == 827 or step == 831 then 
+        tweenFadeIn(2, 0, 0.1)
     end
     -- right arrow 
-    if step == 770 or step == 782 or step == 790 or step == 798 or step == 806 or step == 814 or step == 822 or step == 830 then 
+    if step == 770 or step == 774 or step == 786 or step == 790 or step == 802 or step == 806 or step == 818 or step == 822 then 
         tweenFadeOut(3, 1, 0.001)
     end
-    if step == 771 or step == 783 or step == 791 or step == 799 or step == 807 or step == 815 or step == 823 then 
-        tweenFadeIn(3, 0, 0.15)
+    if step == 771 or step == 775 or step == 787 or step == 791 or step == 803 or step == 807 or step == 819 or step == 823 then 
+        tweenFadeIn(3, 0, 0.1)
     end
     if step == 832 then 
         for i = 0, 3 do 

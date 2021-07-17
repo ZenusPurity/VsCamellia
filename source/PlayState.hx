@@ -299,13 +299,10 @@ class PlayState extends MusicBeatState
 
 		#if windows
 		if (_camsave.data.modcharts)
-			if (!_camsave.data.cmode)
-				executeModchart = FileSystem.exists(Paths.lua(songLowercase + "/modchart"));
-			else 
+			if (_camsave.data.cmode)
 				executeModchartC = FileSystem.exists(Paths.lua(songLowercase + "/modchart-c"));
-
-		if (executeModchart || executeModchartC)
-			PlayStateChangeables.Optimize = false;
+			else if (!_camsave.data.modcharts) 
+				executeModchart = FileSystem.exists(Paths.lua(songLowercase + "/modchart"));
 		#end
 		#if !cpp
 		executeModchart = false; // FORCE disable for non cpp targets
@@ -1966,7 +1963,7 @@ class PlayState extends MusicBeatState
 
 				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, null, null, daDeath);
 
-				if (!gottaHitNote && PlayStateChangeables.Optimize)
+				if (!gottaHitNote && PlayStateChangeables.Optimize && !_camsave.data.modcharts)
 					continue;
 
 				swagNote.sustainLength = songNotes[2];
@@ -2038,7 +2035,7 @@ class PlayState extends MusicBeatState
 			// defaults if no noteStyle was found in chart
 			var noteTypeCheck:String = 'normal';
 
-			if (PlayStateChangeables.Optimize && player == 0)
+			if (PlayStateChangeables.Optimize && !_camsave.data.modcharts && player == 0)
 				continue;
 
 			if (FlxG.save.data.sm)
@@ -2219,13 +2216,15 @@ class PlayState extends MusicBeatState
 
 			babyArrow.animation.play('static');
 			if (_camsave.data.modcharts)
-				babyArrow.x += 90;
+				babyArrow.x += 110;
 			else 
 				babyArrow.x += 50;
 			
 			babyArrow.x += ((FlxG.width / 2) * player);
 
-			if (PlayStateChangeables.Optimize)
+			if (PlayStateChangeables.Optimize && _camsave.data.modcharts)
+				babyArrow.x += 0;
+			else if (PlayStateChangeables.Optimize && !_camsave.data.modcharts)
 				babyArrow.x -= 275;
 			
 			cpuStrums.forEach(function(spr:FlxSprite)
