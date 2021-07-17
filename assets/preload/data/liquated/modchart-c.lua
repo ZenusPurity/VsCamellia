@@ -485,7 +485,7 @@ function stepHit (step)
         for i = 0, 3 do 
             tweenPosXAngle(i, _G['defaultStrum'..i..'X'] - 320,getActorAngle(i), 0.001, 'setDefaultX')
         end
-    endd
+    end
 -- funny more moving arrows for the chorus COOLL!!!!!! 
     if step == 896 then 
         for i = 0, 3 do 
