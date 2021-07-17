@@ -9,6 +9,7 @@ import openfl.display.FPS;
 import openfl.Lib;
 
 import TitleState._camsave as _camsave;
+import PlayState;
 
 class OptionCategory
 {
@@ -724,26 +725,6 @@ class CamZoomOption extends Option
 	}
 }
 
-class CMode extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	public override function press():Bool
-	{
-		_camsave.data.cmode = !_camsave.data.cmode;
-		display = updateDisplay();
-		return true;
-	}
-
-	private override function updateDisplay():String
-	{
-		return "C-Mode " + (_camsave.data.cmode ? "on" : "off");
-	}
-}
-
 class Modcharts extends Option
 {
 	public function new(desc:String)
@@ -754,6 +735,7 @@ class Modcharts extends Option
 	public override function press():Bool
 	{
 		_camsave.data.modcharts = !_camsave.data.modcharts;
+		_camsave.flush();
 		display = updateDisplay();
 		return true;
 	}
@@ -794,6 +776,8 @@ class DamageMode extends Option
 
 		trace(_camsave.data.damagemode);
 
+		_camsave.flush();
+
 		return true;
 	}
 
@@ -812,6 +796,167 @@ class DamageMode extends Option
 		
 		trace(_camsave.data.damagemode);
 
+		_camsave.flush();
+
 		return true;
+	}
+}
+
+class HitNoise extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+		acceptValues = true;
+	}
+
+	public override function press():Bool
+	{
+		return false;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Hit Sounds";
+	}
+
+	override function right():Bool {
+		_camsave.data.hitnoise += 0.1;
+
+		if (_camsave.data.hitnoise < 0)
+			_camsave.data.hitnoise = 0;
+
+		if (_camsave.data.hitnoise > 1)
+			_camsave.data.hitnoise = 1;
+
+		trace(_camsave.data.hitnoise);
+
+		_camsave.flush();
+
+		return true;
+	}
+
+	override function getValue():String {
+		return "Changes the volume of hit sounds! Volume = "+ _camsave.data.hitnoise * 100 + "%";
+	}
+
+	override function left():Bool {
+		_camsave.data.hitnoise -= 0.1;
+
+		if (_camsave.data.hitnoise < 0)
+			_camsave.data.hitnoise = 0;
+
+		if (_camsave.data.hitnoise > 1)
+			_camsave.data.hitnoise = 1;
+		
+		trace(_camsave.data.hitnoise);
+
+		_camsave.flush();
+
+		return true;
+	}
+}
+
+class HealthDrain extends Option
+{
+	public function new(desc:String)
+		{
+			super();
+			description = desc;
+			acceptValues = true;
+		}
+	
+	public override function press():Bool
+		{
+			_camsave.data.draintoggle = !_camsave.data.draintoggle;
+			_camsave.flush();
+			display = updateDisplay();
+			return true;
+		}
+
+	private override function updateDisplay():String
+		{
+			return "Health Drain " + (_camsave.data.draintoggle ? "On" : "Off");
+		}
+	
+	override function right():Bool
+	{
+		_camsave.data.healthdrain += 0.2;
+
+		if (_camsave.data.healthdrain < 1)
+			_camsave.data.healthdrain = 1;
+
+		if (_camsave.data.healthdrain > 100)
+			_camsave.data.healthdrain = 100;
+
+		trace(_camsave.data.healthdrain);
+
+		_camsave.flush();
+
+		return true;
+	}
+	override function left():Bool
+	{
+		_camsave.data.healthdrain -= 0.2;
+
+		if (_camsave.data.healthdrain < 1)
+			_camsave.data.healthdrain = 1;
+
+		if (_camsave.data.healthdrain > 100)
+			_camsave.data.healthdrain = 100;
+
+		trace(_camsave.data.healthdrain);
+
+		_camsave.flush();
+
+		return true;
+	}
+
+	override function getValue():String {
+		return "IN TESTING!! Boyfriend fights back! "+_camsave.data.healthdrain+" times the damage, deals "+(0.005 * _camsave.data.healthdrain)*100+"% per hit";
+	}
+
+}
+
+class CMode extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	public override function press():Bool
+	{
+		_camsave.data.cmode = !_camsave.data.cmode;
+		_camsave.flush();
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "C-Mode " + (_camsave.data.cmode ? "on" : "off");
+	}
+}
+
+class Vocals extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	public override function press():Bool
+	{
+		_camsave.data.vocals = !_camsave.data.vocals;
+		_camsave.flush();
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Vocals " + (_camsave.data.vocals ? "on" : "off");
 	}
 }

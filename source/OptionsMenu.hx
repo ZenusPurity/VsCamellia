@@ -1,5 +1,6 @@
 package;
 
+import haxe.display.Protocol.HaxeNotificationMethod;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -17,6 +18,8 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
 
+import TitleState._camsave;
+
 class OptionsMenu extends MusicBeatState
 {
 	public static var instance:OptionsMenu;
@@ -25,10 +28,18 @@ class OptionsMenu extends MusicBeatState
 	var curSelected:Int = 0;
 
 	var options:Array<OptionCategory> = [
-		new OptionCategory("Modifiers", [
+		new OptionCategory("C-Mode", [
 			new CMode("Play the harder charts as Camellia!"),
-			new Modcharts("Throw special effects in the mix! !!SEIZURE WARNING!!")
+			new Modcharts("Throw special effects in the mix! !!SEIZURE WARNING!!"),
+			new HealthDrain("Drains health in C-Mode")
 			// new DamageMode("Adds a chance for damage notes to appear. It's random! CURRENTLY IN TESTING, you have been warned!")
+		]),
+		new OptionCategory("Custom Features",[
+			new HitNoise("Plays the hit noise from other 4 key games"),
+			#if windows
+			new Modcharts("Throw special effects in the mix!"),
+			new Vocals("Toggle the vocals playing on songs.")
+			#end
 		]),
 		new OptionCategory("Gameplay", [
 			new DFJKOption(controls),

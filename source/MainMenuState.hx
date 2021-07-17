@@ -127,6 +127,7 @@ class MainMenuState extends MusicBeatState
 		// wall.scale.set(1.55, 1.55);
 		wall.antialiasing = true;
 		wall.active = false;
+		wall.screenCenter(X);
 		wall.setGraphicSize(Std.int(wall.width * 0.9));
 		add(wall);
 
@@ -247,7 +248,7 @@ class MainMenuState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		#if debug
-		if(FlxG.keys.justPressed.T){trace("Hi Tenta!");_camsave.data.ghostUnlock=true;_camsave.flush();trace(_camsave.data);}
+		if(FlxG.keys.justPressed.T){trace("Hi Tenta!");trace(_camsave.data);}
 		#end
 
 		// if(FlxG.keys.justPressed.SIX){FlxG.switchState(new AnimationDebug("camellia"));}

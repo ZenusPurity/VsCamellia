@@ -1859,7 +1859,7 @@ class PlayState extends MusicBeatState
 
 		curSong = songData.song;
 
-		if (SONG.needsVoices)
+		if (SONG.needsVoices && _camsave.data.vocals)
 			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
 		else
 			vocals = new FlxSound();
@@ -1920,7 +1920,6 @@ class PlayState extends MusicBeatState
 			var coolSection:Int = Std.int(section.lengthInSteps / 4);
 
 			PlayStateChangeables.damageValue = _camsave.data.damagemode;
-			trace(PlayStateChangeables.damageValue + "%");
 
 			for (songNotes in section.sectionNotes)
 			{
@@ -2951,6 +2950,8 @@ class PlayState extends MusicBeatState
 					daNote.active = true;
 				}
 
+				var brr = strumLine.y + Note.swagWidth/2;
+
 				if (!daNote.modifiedByLua)
 				{
 					if (PlayStateChangeables.useDownscroll)
@@ -2976,14 +2977,11 @@ class PlayState extends MusicBeatState
 							// If not in botplay, only clip sustain notes when properly hit, botplay gets to clip it everytime
 							if (!PlayStateChangeables.botPlay)
 							{
-								if ((!daNote.mustPress || daNote.wasGoodHit || daNote.prevNote.wasGoodHit && !daNote.canBeHit)
-									&& daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= (strumLine.y + Note.swagWidth / 2))
+								if ((daNote.wasGoodHit || daNote.prevNote.wasGoodHit && !daNote.canBeHit))
 								{
 									// Clip to strumline
 									var swagRect = new FlxRect(0, 0, daNote.frameWidth * 2, daNote.frameHeight * 2);
-									swagRect.height = (strumLineNotes.members[Math.floor(Math.abs(daNote.noteData))].y
-										+ Note.swagWidth / 2
-										- daNote.y) / daNote.scale.y;
+									swagRect.height = (brr-daNote.y)/daNote.scale.y;
 									swagRect.y = daNote.frameHeight - swagRect.height;
 
 									daNote.clipRect = swagRect;
@@ -2992,9 +2990,7 @@ class PlayState extends MusicBeatState
 							else
 							{
 								var swagRect = new FlxRect(0, 0, daNote.frameWidth * 2, daNote.frameHeight * 2);
-								swagRect.height = (strumLineNotes.members[Math.floor(Math.abs(daNote.noteData))].y
-									+ Note.swagWidth / 2
-									- daNote.y) / daNote.scale.y;
+								swagRect.height = (brr-daNote.y)/daNote.scale.y;
 								swagRect.y = daNote.frameHeight - swagRect.height;
 
 								daNote.clipRect = swagRect;
@@ -3017,14 +3013,11 @@ class PlayState extends MusicBeatState
 
 							if (!PlayStateChangeables.botPlay)
 							{
-								if ((!daNote.mustPress || daNote.wasGoodHit || daNote.prevNote.wasGoodHit && !daNote.canBeHit)
-									&& daNote.y + daNote.offset.y * daNote.scale.y <= (strumLine.y + Note.swagWidth / 2))
+								if ((daNote.wasGoodHit || daNote.prevNote.wasGoodHit && !daNote.canBeHit))
 								{
 									// Clip to strumline
 									var swagRect = new FlxRect(0, 0, daNote.width / daNote.scale.x, daNote.height / daNote.scale.y);
-									swagRect.y = (strumLineNotes.members[Math.floor(Math.abs(daNote.noteData))].y
-										+ Note.swagWidth / 2
-										- daNote.y) / daNote.scale.y;
+									swagRect.height = (brr-daNote.y)/daNote.scale.y;
 									swagRect.height -= swagRect.y;
 
 									daNote.clipRect = swagRect;
@@ -3033,9 +3026,7 @@ class PlayState extends MusicBeatState
 							else
 							{
 								var swagRect = new FlxRect(0, 0, daNote.width / daNote.scale.x, daNote.height / daNote.scale.y);
-								swagRect.y = (strumLineNotes.members[Math.floor(Math.abs(daNote.noteData))].y
-									+ Note.swagWidth / 2
-									- daNote.y) / daNote.scale.y;
+								swagRect.height = (brr-daNote.y)/daNote.scale.y;
 								swagRect.height -= swagRect.y;
 
 								daNote.clipRect = swagRect;
@@ -3066,6 +3057,13 @@ class PlayState extends MusicBeatState
 							dad.playAnim('singDOWN' + altAnim, true);
 						case 0:
 							dad.playAnim('singLEFT' + altAnim, true);
+					}
+
+					if(_camsave.data.cmode && _camsave.data.draintoggle)
+					{
+						// BF is rapping against you so it make sense :P
+						var damage:Float = 0.005 * _camsave.data.healthdrain;
+						if(health > damage && health != damage){health -= damage;}
 					}
 
 					dad.holdTimer = 0;
@@ -3152,7 +3150,8 @@ class PlayState extends MusicBeatState
 									totalNotesHit += 1;
 								else
 								{
-									vocals.volume = 0;
+									if(!_camsave.data.cmode){vocals.volume = 0;}
+									else{FlxG.sound.music.volume = 0;}
 									if (theFunne && !daNote.isSustainNote)
 										noteMiss(daNote.noteData, daNote);
 
@@ -3191,7 +3190,8 @@ class PlayState extends MusicBeatState
 							}
 							else
 							{
-								vocals.volume = 0;
+								if(!_camsave.data.cmode){vocals.volume = 0;}
+								else{FlxG.sound.music.volume = 0;}
 								if (theFunne && !daNote.isSustainNote)
 									noteMiss(daNote.noteData, daNote);
 
@@ -3443,7 +3443,8 @@ class PlayState extends MusicBeatState
 		var noteDiff:Float = -(daNote.strumTime - Conductor.songPosition);
 		var wife:Float = EtternaFunctions.wife3(-noteDiff, Conductor.timeScale);
 		// boyfriend.playAnim('hey');
-		vocals.volume = 1;
+		if(!_camsave.data.cmode){vocals.volume = 1;}
+		else{FlxG.sound.music.volume = 1;}
 		var placement:String = Std.string(combo);
 
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
@@ -3734,6 +3735,7 @@ class PlayState extends MusicBeatState
 
 	private function keyShit():Void // I've invested in emma stocks
 	{
+
 		// control arrays, order L D R U
 		var holdArray:Array<Bool> = [controls.LEFT, controls.DOWN, controls.UP, controls.RIGHT];
 		var pressArray:Array<Bool> = [controls.LEFT_P, controls.DOWN_P, controls.UP_P, controls.RIGHT_P];
@@ -3789,6 +3791,9 @@ class PlayState extends MusicBeatState
 					goodNoteHit(daNote);
 			});
 		}
+
+		if (FlxG.keys.justPressed.ANY)
+			if(_camsave.data.hitnoise!=0){FlxG.sound.play(Paths.sound("normal-hitnormal", "preload"), _camsave.data.hitnoise, false);}
 
 		if ((KeyBinds.gamepad && !FlxG.keys.justPressed.ANY) || nonCpp)
 		{
@@ -4292,7 +4297,8 @@ class PlayState extends MusicBeatState
 				});
 
 				note.wasGoodHit = true;
-				vocals.volume = 1;
+				if(!_camsave.data.cmode){vocals.volume = 1;}
+				else{FlxG.sound.music.volume = 1;}
 
 				note.kill();
 				notes.remove(note, true);
