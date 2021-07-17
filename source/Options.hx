@@ -885,7 +885,7 @@ class HealthDrain extends Option
 		_camsave.data.healthdrain += 0.2;
 
 		if (_camsave.data.healthdrain < 1)
-			_camsave.data.healthdrain = 5;
+			_camsave.data.healthdrain = 1;
 
 		if (_camsave.data.healthdrain > 100)
 			_camsave.data.healthdrain = 100;
@@ -901,7 +901,7 @@ class HealthDrain extends Option
 		_camsave.data.healthdrain -= 0.2;
 
 		if (_camsave.data.healthdrain < 1)
-			_camsave.data.healthdrain = 5;
+			_camsave.data.healthdrain = 1;
 
 		if (_camsave.data.healthdrain > 100)
 			_camsave.data.healthdrain = 100;

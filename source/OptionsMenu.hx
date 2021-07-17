@@ -70,11 +70,13 @@ class OptionsMenu extends MusicBeatState
 		new OptionCategory("Misc", [
 			#if desktop
 			new ReplayOption("View replays"),
+			new FPSOption("Toggle the FPS Counter"),
 			#end
 			new FlashingLightsOption("Toggle flashing lights that can cause epileptic seizures and strain."),
 			new WatermarkOption("Enable and disable all watermarks from the engine."),
 			new ScoreScreen("Show the score screen after the end of a song"),
 			new ShowInput("Display every single input in the score screen."),
+			new Optimization("No backgrounds, no characters, centered notes, no player 2."),
 			new BotPlay("Showcase your charts and mods with autoplay."),
 		])
 		
